@@ -16,11 +16,34 @@ def lista_ofertas(request):
         
         keywords = request.session.get('keywords', 'devops')
         ubicacion = request.session.get('ubicacion', 'Valencia')
+        modalidad = request.session.get('modalidad', '')
+        experiencia = request.session.get('experiencia', '')
+        salario_min = request.session.get('salario_min', '')
         
-        resultado = buscar_ofertas(keywords=keywords, ubicacion=ubicacion)
+        resultado = buscar_ofertas(
+            keywords=keywords,
+            ubicacion=ubicacion,
+            salary_min=salario_min if salario_min else None
+        )
         ofertas_api = resultado.get('results', [])
         
         for item in ofertas_api:
+            descripcion = item.get('description', '').lower()
+            
+            if modalidad == 'remoto' and 'remoto' not in descripcion and 'remote' not in descripcion:
+                continue
+            if modalidad == 'hibrido' and 'híbrido' not in descripcion and 'hibrido' not in descripcion and 'hybrid' not in descripcion:
+                continue
+            if modalidad == 'presencial' and 'presencial' not in descripcion:
+                continue
+            
+            if experiencia == '0' and any(x in descripcion for x in ['3 años', '4 años', '5 años', 'senior']):
+                continue
+            if experiencia == '1' and any(x in descripcion for x in ['3 años', '4 años', '5 años', 'senior']):
+                continue
+            if experiencia == '2' and any(x in descripcion for x in ['4 años', '5 años', 'senior']):
+                continue
+            
             oferta_id = item.get('id')
             if not Oferta.objects.filter(url_original__contains=oferta_id).exists():
                 Oferta.objects.create(
@@ -42,28 +65,64 @@ def lista_ofertas(request):
     paginator = Paginator(todas, 10)
     pagina = request.GET.get('page', 1)
     ofertas = paginator.get_page(pagina)
-    return render(request, 'ofertas/lista.html', {'ofertas': ofertas, 'seccion': 'nuevas'})
+
+    contadores = {
+        'nuevas': Oferta.objects.filter(estado='nueva').count(),
+        'vistas': Oferta.objects.filter(estado='vista').count(),
+        'guardadas': Oferta.objects.filter(estado='guardada').count(),
+        'descartadas': Oferta.objects.filter(estado='descartada').count(),
+    }
+
+    busqueda_activa = {
+        'keywords': request.session.get('keywords', ''),
+        'ubicacion': request.session.get('ubicacion', ''),
+    }
+
+    return render(request, 'ofertas/lista.html', {
+        'ofertas': ofertas,
+        'seccion': 'nuevas',
+        'contadores': contadores,
+        'busqueda_activa': busqueda_activa,
+    })
 
 def ofertas_vistas(request):
     todas = Oferta.objects.filter(estado='vista').order_by('-fecha_guardada')
     paginator = Paginator(todas, 10)
     pagina = request.GET.get('page', 1)
     ofertas = paginator.get_page(pagina)
-    return render(request, 'ofertas/lista.html', {'ofertas': ofertas, 'seccion': 'vistas'})
+    contadores = {
+        'nuevas': Oferta.objects.filter(estado='nueva').count(),
+        'vistas': Oferta.objects.filter(estado='vista').count(),
+        'guardadas': Oferta.objects.filter(estado='guardada').count(),
+        'descartadas': Oferta.objects.filter(estado='descartada').count(),
+    }
+    return render(request, 'ofertas/lista.html', {'ofertas': ofertas, 'seccion': 'vistas', 'contadores': contadores})
 
 def ofertas_guardadas(request):
     todas = Oferta.objects.filter(estado='guardada').order_by('-fecha_guardada')
     paginator = Paginator(todas, 10)
     pagina = request.GET.get('page', 1)
     ofertas = paginator.get_page(pagina)
-    return render(request, 'ofertas/lista.html', {'ofertas': ofertas, 'seccion': 'guardadas'})
+    contadores = {
+        'nuevas': Oferta.objects.filter(estado='nueva').count(),
+        'vistas': Oferta.objects.filter(estado='vista').count(),
+        'guardadas': Oferta.objects.filter(estado='guardada').count(),
+        'descartadas': Oferta.objects.filter(estado='descartada').count(),
+    }
+    return render(request, 'ofertas/lista.html', {'ofertas': ofertas, 'seccion': 'guardadas', 'contadores': contadores})
 
 def ofertas_descartadas(request):
     todas = Oferta.objects.filter(estado='descartada').order_by('-fecha_guardada')
     paginator = Paginator(todas, 10)
     pagina = request.GET.get('page', 1)
     ofertas = paginator.get_page(pagina)
-    return render(request, 'ofertas/lista.html', {'ofertas': ofertas, 'seccion': 'descartadas'})
+    contadores = {
+        'nuevas': Oferta.objects.filter(estado='nueva').count(),
+        'vistas': Oferta.objects.filter(estado='vista').count(),
+        'guardadas': Oferta.objects.filter(estado='guardada').count(),
+        'descartadas': Oferta.objects.filter(estado='descartada').count(),
+    }
+    return render(request, 'ofertas/lista.html', {'ofertas': ofertas, 'seccion': 'descartadas', 'contadores': contadores})
 
 def cambiar_estado(request, pk, estado):
     oferta = get_object_or_404(Oferta, pk=pk)
@@ -83,7 +142,14 @@ def detalle_oferta(request, pk):
     if oferta.estado == 'nueva':
         oferta.estado = 'vista'
         oferta.save()
-    return render(request, 'ofertas/detalle.html', {'oferta': oferta})
+    
+    from .cv import resumir_oferta
+    resumen = resumir_oferta(oferta.descripcion)
+    
+    return render(request, 'ofertas/detalle.html', {
+        'oferta': oferta,
+        'resumen': resumen
+    })
 
 def analizar_cv(request, pk):
     oferta = get_object_or_404(Oferta, pk=pk)
@@ -133,20 +199,6 @@ def analizar_cv(request, pk):
         'cv_texto_guardado': cv_texto_guardado
     })
 
-def buscador(request):
-    if request.method == 'POST':
-        keywords = request.POST.get('keywords', '').strip()
-        ubicacion = request.POST.get('ubicacion', '').strip()
-
-        request.session['keywords'] = keywords
-        request.session['ubicacion'] = ubicacion
-        request.session['buscar_ahora'] = True
-        request.session.modified = True
-        
-        return redirect('lista_ofertas')
-    
-    return render(request, 'ofertas/buscador.html')
-
 def generar_cv(request, pk):
     oferta = get_object_or_404(Oferta, pk=pk)
     
@@ -162,3 +214,23 @@ def generar_cv(request, pk):
         'oferta': oferta,
         'cv_generado': cv_generado
     })
+
+def buscador(request):
+    if request.method == 'POST':
+        keywords = request.POST.get('keywords', '').strip()
+        ubicacion = request.POST.get('ubicacion', '').strip()
+        modalidad = request.POST.get('modalidad', '')
+        experiencia = request.POST.get('experiencia', '')
+        salario_min = request.POST.get('salario_min', '')
+
+        request.session['keywords'] = keywords
+        request.session['ubicacion'] = ubicacion
+        request.session['modalidad'] = modalidad
+        request.session['experiencia'] = experiencia
+        request.session['salario_min'] = salario_min
+        request.session['buscar_ahora'] = True
+        request.session.modified = True
+        
+        return redirect('lista_ofertas')
+    
+    return render(request, 'ofertas/buscador.html')

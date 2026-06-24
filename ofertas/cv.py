@@ -14,6 +14,30 @@ def extraer_texto_pdf(pdf_bytes):
         texto += page.get_text()
     return texto
 
+def resumir_oferta(descripcion_oferta):
+    prompt = f"""Analiza esta oferta de trabajo y extrae la información clave en este formato exacto:
+
+PUESTO: (título del puesto)
+EMPRESA: (nombre de la empresa si aparece)
+MODALIDAD: (Remoto / Híbrido / Presencial / No especificado)
+EXPERIENCIA: (años requeridos o No especificado)
+SALARIO: (rango si aparece o No especificado)
+STACK: (tecnologías y herramientas principales, separadas por comas)
+RESUMEN: (2-3 frases explicando de qué trata el puesto y qué buscan)
+
+Oferta:
+{descripcion_oferta}
+
+Responde SOLO con el formato indicado, sin añadir nada más."""
+
+    respuesta = cliente.chat.completions.create(
+        model='llama-3.3-70b-versatile',
+        messages=[{'role': 'user', 'content': prompt}],
+        max_tokens=500,
+    )
+    
+    return respuesta.choices[0].message.content
+
 def analizar_oferta_para_cv(descripcion_oferta, cv_texto):
     prompt = f"""Eres un experto en selección de personal y optimización de CVs para sistemas ATS.
 
@@ -23,24 +47,29 @@ Tengo esta oferta de trabajo:
 Este es mi CV actual:
 {cv_texto}
 
+Analiza el nivel de la oferta (junior, mid, senior) y tenlo en cuenta en tu análisis.
+No me pidas experiencia que no corresponda al nivel de la oferta.
+
 Responde en este formato exacto:
 
 COMPATIBILIDAD: X%
 (donde X es un número del 0 al 100 indicando cuánto encaja mi CV con esta oferta)
 
+NIVEL DE LA OFERTA: (Junior/Mid/Senior)
+
 RESUMEN:
-(2-3 frases explicando por qué ese porcentaje)
+(2-3 frases explicando por qué ese porcentaje, teniendo en cuenta el nivel)
 
 PALABRAS CLAVE QUE FALTAN:
-(lista de palabras clave de la oferta que no aparecen en mi CV)
+(solo las relevantes para el nivel de la oferta)
 
 QUÉ DESTACAR:
-(qué experiencias o habilidades de mi CV son más relevantes para esta oferta)
+(qué experiencias o habilidades de mi CV son más relevantes para esta oferta concreta)
 
 CAMBIOS CONCRETOS:
-(cambios específicos que debo hacer en mi CV para esta oferta)
+(cambios específicos y realistas para mi nivel)
 
-Sé directo y específico, no genérico."""
+Sé directo, específico y realista con el nivel de experiencia del candidato."""
 
     respuesta = cliente.chat.completions.create(
         model='llama-3.3-70b-versatile',

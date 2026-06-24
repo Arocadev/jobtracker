@@ -16,14 +16,29 @@
             <i class="ti ti-search"></i> Buscador
         </a>
         <div class="navbar-divider"></div>
-        <a href="{% url 'lista_ofertas' %}" class="nav-link {% if seccion == 'nuevas' %}active{% endif %}">Nuevas</a>
-        <a href="{% url 'ofertas_vistas' %}" class="nav-link {% if seccion == 'vistas' %}active{% endif %}">Vistas</a>
-        <a href="{% url 'ofertas_guardadas' %}" class="nav-link {% if seccion == 'guardadas' %}active{% endif %}">Guardadas</a>
-        <a href="{% url 'ofertas_descartadas' %}" class="nav-link {% if seccion == 'descartadas' %}active{% endif %}">Descartadas</a>
+        <a href="{% url 'lista_ofertas' %}" class="nav-link {% if seccion == 'nuevas' %}active{% endif %}">
+            Nuevas {% if contadores.nuevas %}<span style="font-size:11px; background:rgba(255,255,255,0.2); padding:1px 6px; border-radius:10px;">{{ contadores.nuevas }}</span>{% endif %}
+        </a>
+        <a href="{% url 'ofertas_vistas' %}" class="nav-link {% if seccion == 'vistas' %}active{% endif %}">
+            Vistas {% if contadores.vistas %}<span style="font-size:11px; background:rgba(255,255,255,0.2); padding:1px 6px; border-radius:10px;">{{ contadores.vistas }}</span>{% endif %}
+        </a>
+        <a href="{% url 'ofertas_guardadas' %}" class="nav-link {% if seccion == 'guardadas' %}active{% endif %}">
+            Guardadas {% if contadores.guardadas %}<span style="font-size:11px; background:rgba(255,255,255,0.2); padding:1px 6px; border-radius:10px;">{{ contadores.guardadas }}</span>{% endif %}
+        </a>
+        <a href="{% url 'ofertas_descartadas' %}" class="nav-link {% if seccion == 'descartadas' %}active{% endif %}">
+            Descartadas {% if contadores.descartadas %}<span style="font-size:11px; background:rgba(255,255,255,0.2); padding:1px 6px; border-radius:10px;">{{ contadores.descartadas }}</span>{% endif %}
+        </a>
     </div>
 </nav>
 
 <div class="container">
+
+    {% if busqueda_activa.keywords %}
+    <p style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">
+        <i class="ti ti-search"></i> Buscando <strong>{{ busqueda_activa.keywords }}</strong> en <strong>{{ busqueda_activa.ubicacion }}</strong>
+    </p>
+    {% endif %}
+
     {% if seccion == 'descartadas' %}
     <form method="POST" action="{% url 'eliminar_ofertas' %}" id="form-eliminar">
         {% csrf_token %}

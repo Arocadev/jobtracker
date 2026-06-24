@@ -67,9 +67,11 @@
                 <input type="number" name="salario_min" class="form-control" placeholder="Ej: 25000" value="{{ request.session.salario_min|default:'' }}">
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 14px; margin-top: 8px;">
-                <i class="ti ti-search"></i> Buscar ofertas
-            </button>
+            <div style="text-align: center; margin-top: 16px;">
+                <button type="submit" class="btn btn-primary" style="padding: 8px 24px; font-size: 14px;">
+                    Buscar ofertas
+                </button>
+            </div>
         </form>
     </div>
 </div>

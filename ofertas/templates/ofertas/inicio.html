@@ -23,42 +23,81 @@
     </div>
 </nav>
 
-<div class="container" style="max-width: 700px; margin-top: 64px; text-align: center;">
+<div class="container" style="max-width: 760px; margin-top: 56px;">
 
-    <h1 style="font-size: 32px; font-weight: 500; color: #1a1a2e; margin-bottom: 12px;">JobTracker</h1>
-    <p style="font-size: 16px; color: #6b7280; margin-bottom: 48px;">Tu herramienta personal de búsqueda de empleo.</p>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 48px; text-align: left;">
-
-        <div style="background: #fff; border: 0.5px solid #d0d5dd; border-left: 3px solid #185FA5; border-radius: 6px; padding: 20px;">
-            <i class="ti ti-search" style="font-size: 20px; color: #185FA5; margin-bottom: 10px; display: block;"></i>
-            <h3 style="font-size: 14px; font-weight: 500; margin-bottom: 6px;">Busca ofertas</h3>
-            <p style="font-size: 13px; color: #6b7280;">Configura tus filtros y busca ofertas de empleo de múltiples fuentes en un solo clic.</p>
-        </div>
-
-        <div style="background: #fff; border: 0.5px solid #d0d5dd; border-left: 3px solid #185FA5; border-radius: 6px; padding: 20px;">
-            <i class="ti ti-star" style="font-size: 20px; color: #185FA5; margin-bottom: 10px; display: block;"></i>
-            <h3 style="font-size: 14px; font-weight: 500; margin-bottom: 6px;">Gestiona tus favoritas</h3>
-            <p style="font-size: 13px; color: #6b7280;">Guarda las que te interesan, descarta las que no y mantén un seguimiento de las que has visto.</p>
-        </div>
-
-        <div style="background: #fff; border: 0.5px solid #d0d5dd; border-left: 3px solid #185FA5; border-radius: 6px; padding: 20px;">
-            <i class="ti ti-file-text" style="font-size: 20px; color: #185FA5; margin-bottom: 10px; display: block;"></i>
-            <h3 style="font-size: 14px; font-weight: 500; margin-bottom: 6px;">Analiza tu CV</h3>
-            <p style="font-size: 13px; color: #6b7280;">La IA analiza tu CV contra cada oferta y te dice qué mejorar para pasar los filtros ATS.</p>
-        </div>
-
-        <div style="background: #fff; border: 0.5px solid #d0d5dd; border-left: 3px solid #185FA5; border-radius: 6px; padding: 20px;">
-            <i class="ti ti-chart-bar" style="font-size: 20px; color: #185FA5; margin-bottom: 10px; display: block;"></i>
-            <h3 style="font-size: 14px; font-weight: 500; margin-bottom: 6px;">Compatibilidad</h3>
-            <p style="font-size: 13px; color: #6b7280;">Obtén un porcentaje de compatibilidad entre tu perfil y cada oferta para priorizar dónde aplicar.</p>
-        </div>
-
+    <!-- HERO -->
+    <div style="text-align: center; margin-bottom: 56px;">
+        <h1 style="font-size: 36px; font-weight: 500; color: #1a1a2e; margin-bottom: 14px;">JobTracker</h1>
+        <p style="font-size: 16px; color: #6b7280; max-width: 520px; margin: 0 auto; line-height: 1.6;">
+            Tu herramienta personal para buscar trabajo de forma inteligente. Busca ofertas, organízalas y deja que la IA analice tu CV para cada una.
+        </p>
     </div>
 
-    <a href="{% url 'buscador' %}" class="btn btn-primary" style="padding: 12px 32px; font-size: 15px;">
-        <i class="ti ti-search"></i> Empezar a buscar
-    </a>
+    <!-- CÓMO FUNCIONA -->
+    <div style="margin-bottom: 48px;">
+        <h2 style="font-size: 16px; font-weight: 500; color: #1a1a2e; margin-bottom: 20px; text-align: center;">¿Cómo funciona?</h2>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+
+            <div style="background: #fff; border: 0.5px solid #d0d5dd; border-left: 3px solid #185FA5; border-radius: 6px; padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span style="background: #185FA5; color: #fff; font-size: 12px; font-weight: 500; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">1</span>
+                    <h3 style="font-size: 14px; font-weight: 500; margin: 0;">Configura tu búsqueda</h3>
+                </div>
+                <p style="font-size: 13px; color: #6b7280; line-height: 1.6; margin: 0;">Ve al buscador y pon las palabras clave que buscas y la ciudad o zona. También puedes filtrar por modalidad (remoto, híbrido, presencial) y experiencia requerida.</p>
+            </div>
+
+            <div style="background: #fff; border: 0.5px solid #d0d5dd; border-left: 3px solid #185FA5; border-radius: 6px; padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span style="background: #185FA5; color: #fff; font-size: 12px; font-weight: 500; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">2</span>
+                    <h3 style="font-size: 14px; font-weight: 500; margin: 0;">Revisa las ofertas</h3>
+                </div>
+                <p style="font-size: 13px; color: #6b7280; line-height: 1.6; margin: 0;">Las ofertas aparecen en el listado de Nuevas. Puedes ver el resumen de cada una — stack, modalidad, experiencia requerida — generado por IA, sin tener que abrir el enlace original.</p>
+            </div>
+
+            <div style="background: #fff; border: 0.5px solid #d0d5dd; border-left: 3px solid #185FA5; border-radius: 6px; padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span style="background: #185FA5; color: #fff; font-size: 12px; font-weight: 500; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">3</span>
+                    <h3 style="font-size: 14px; font-weight: 500; margin: 0;">Organiza las que te interesan</h3>
+                </div>
+                <p style="font-size: 13px; color: #6b7280; line-height: 1.6; margin: 0;">Guarda las que te interesen, descarta las que no. Las que guardes quedan en tu lista de Guardadas para volver a ellas cuando quieras. Las descartadas puedes eliminarlas cuando quieras limpiar.</p>
+            </div>
+
+            <div style="background: #fff; border: 0.5px solid #d0d5dd; border-left: 3px solid #185FA5; border-radius: 6px; padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span style="background: #185FA5; color: #fff; font-size: 12px; font-weight: 500; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">4</span>
+                    <h3 style="font-size: 14px; font-weight: 500; margin: 0;">Analiza tu CV con IA</h3>
+                </div>
+                <p style="font-size: 13px; color: #6b7280; line-height: 1.6; margin: 0;">Desde cualquier oferta puedes analizar tu CV. Sube tu CV en PDF o pega el texto, y la IA te dice el porcentaje de compatibilidad, qué palabras clave faltan y qué cambios concretos hacer para pasar los filtros ATS.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- BONUS -->
+    <div style="background: #fff; border: 0.5px solid #d0d5dd; border-radius: 6px; padding: 24px; margin-bottom: 48px;">
+        <h2 style="font-size: 15px; font-weight: 500; color: #1a1a2e; margin-bottom: 16px;">Y además...</h2>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <i class="ti ti-sparkles" style="color: #185FA5; font-size: 16px; margin-top: 2px;"></i>
+                <p style="font-size: 13px; color: #6b7280; margin: 0; line-height: 1.6;"><strong style="color: #1a1a2e;">Genera un CV adaptado</strong> — después del análisis, puedes pedirle a la IA que reescriba tu CV completo adaptado a esa oferta concreta, manteniendo tu información real pero reorganizando y añadiendo las palabras clave que piden.</p>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <i class="ti ti-history" style="color: #185FA5; font-size: 16px; margin-top: 2px;"></i>
+                <p style="font-size: 13px; color: #6b7280; margin: 0; line-height: 1.6;"><strong style="color: #1a1a2e;">Tu CV se recuerda</strong> — una vez subes tu CV, lo recuerda durante toda la sesión. No tienes que volver a subirlo cada vez que analices una oferta nueva.</p>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <i class="ti ti-refresh" style="color: #185FA5; font-size: 16px; margin-top: 2px;"></i>
+                <p style="font-size: 13px; color: #6b7280; margin: 0; line-height: 1.6;"><strong style="color: #1a1a2e;">Búsquedas frescas</strong> — cada vez que buscas de nuevo, las ofertas nuevas se actualizan automáticamente. Las que tenías guardadas o descartadas nunca se tocan.</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 48px;">
+        <a href="{% url 'buscador' %}" class="btn btn-primary" style="padding: 12px 32px; font-size: 15px;">
+            Empezar a buscar
+        </a>
+    </div>
 
 </div>
 
