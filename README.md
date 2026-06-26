@@ -212,7 +212,7 @@ DB_PORT=5432
 
 ## 👤 Autor / Author
 
-**Alejandro Rodríguez Calabuig** — [github.com/Arocadev](https://github.com/Arocadev) · [LinkedIn](https://linkedin.com/in/alejandro-rodriguez-calabuig)
+**Alejandro Rodríguez Calabuig** — [github.com/Arocadev](https://github.com/Arocadev) · [LinkedIn](https://www.linkedin.com/in/alejandro-rodriguez-calabuig-a871a1230)
 
 ---
 
